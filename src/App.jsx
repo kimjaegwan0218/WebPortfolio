@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -48,10 +48,13 @@ const skills = [
   },
   {
     label: "AI & Data",
-    href: "https://kjg-portfolio.vercel.app/projects/car-predict",
-    title: "Python / CatBoost",
+    title: "Python / CatBoost / PatchCore",
     description:
-      "중고차 데이터 전처리, 이상치 제거, 가격 예측 모델 학습 과정을 수행했습니다.",
+      "중고차 가격 예측과 산업 부품 불량 탐지, 두 가지 AI 프로젝트를 진행했습니다.",
+    links: [
+      { label: "CarPredict", to: "/projects/car-predict" },
+      { label: "Defect Detection", to: "/projects/defect-detection" },
+    ],
   },
 ];
 
@@ -105,6 +108,11 @@ const career = [
     title: "CarPredict",
     date: "Team Project",
     description: "중고차 데이터 전처리, 가격 예측 모델 학습, AI 서버 연동 구조 설계",
+  },
+  {
+    title: "Industrial Defect Detection AI",
+    date: "Personal Project",
+    description: "정상 패턴 기반 PatchCore 모델 학습, FastAPI 추론 서버와 Spring Boot 백엔드 연동 구조 설계",
   },
 ];
 
@@ -274,6 +282,61 @@ const projects = [
     video: "/videos/jjicarproject.mp4",
     mainImage: "/images/carpredict-main.png",
   },
+  {
+    slug: "defect-detection",
+    title: "Industrial Defect Detection AI",
+    subtitle: "산업용 제품 불량(결함) 탐지 AI 서비스",
+    period: "Personal Project",
+    color: "blue",
+    summary:
+      "MVTec AD 15개 산업 부품 카테고리에서 정상 패턴을 학습해 불량(이상) 영역을 탐지하고, Image AUROC 0.90 이상의 성능을 검증한 AI 연동 풀스택 프로젝트입니다.",
+    description:
+      "정상 제품 이미지만으로 비전 모델(PatchCore, Anomalib)을 학습시켜 이상 영역을 탐지하는 프로젝트입니다. MVTec AD 15개 카테고리 전체를 학습/서빙하며, FastAPI 기반 AI 서버가 이상 점수와 히트맵을 생성하고 Spring Boot 백엔드가 검사 결과를 저장·조회합니다.",
+    background:
+      "산업 현장에서는 불량품을 사람이 직접 육안으로 검사하는 경우가 많아 일관성과 속도에 한계가 있습니다. 이 프로젝트는 정상 제품 이미지만으로 모델을 학습시켜 정상 패턴에서 벗어나는 영역을 자동으로 탐지하는 방식으로 이러한 한계를 개선하고자 시작했습니다.",
+    results: [
+      {
+        label: "Image AUROC",
+        value: "0.90+",
+        detail: "MVTec AD 15개 카테고리 전체 평균 (src/evaluate_all.py로 검증)",
+      },
+    ],
+    role: [
+      "MVTec AD 데이터셋(15개 카테고리)을 활용한 정상 패턴 기반 학습 데이터 구성",
+      "PatchCore(Anomalib) 모델을 카테고리별로 학습하고 evaluate_all.py로 성능(AUROC) 검증",
+      "FastAPI 기반 추론 서버 구축, /predict API 및 이상 영역 히트맵 생성 구현",
+      "Spring Boot(MariaDB) 기반 백엔드 설계 및 검사 결과 저장·이력 조회 기능 구현",
+    ],
+    features: [
+      "정상 패턴 학습 기반 이상(불량) 탐지",
+      "MVTec AD 15개 카테고리 전체 지원",
+      "이상 영역 히트맵 시각화로 판정 근거 제공",
+      "카테고리별 검사 이력 조회",
+      "FastAPI 추론 서버 + Spring Boot 백엔드 연동 구조",
+    ],
+    tech: ["Python", "PyTorch", "Anomalib(PatchCore)", "FastAPI", "Spring Boot", "MariaDB"],
+    flow: [
+      "MVTec AD 데이터셋에서 카테고리별 정상 패턴 이미지를 수집합니다.",
+      "PatchCore 모델을 정상 이미지 기반으로 학습시키고 evaluate_all.py로 AUROC 성능을 검증합니다.",
+      "FastAPI 서버가 학습된 모델을 불러와 /predict API로 이상 점수와 히트맵을 반환합니다.",
+      "Spring Boot 백엔드가 FastAPI AI 서버에 요청을 보내 검사 결과를 저장하고 이력을 조회할 수 있게 합니다.",
+    ],
+    problems: [
+      {
+        title: "불량 데이터 없이 정상 데이터만으로 이상을 탐지해야 하는 문제",
+        solution:
+          "MVTec AD의 정상 이미지만으로 PatchCore 모델을 학습시켜, 정상 분포에서 벗어나는 영역을 이상(불량) 영역으로 탐지하도록 구성했습니다.",
+      },
+      {
+        title: "학습된 비전 모델을 실제 서비스에서 사용할 수 있도록 만들어야 하는 문제",
+        solution:
+          "FastAPI 기반 추론 서버를 구축해 /predict API로 이상 탐지 결과와 히트맵을 반환하도록 구성하고, Spring Boot 백엔드와 연동할 수 있는 구조로 설계했습니다.",
+      },
+    ],
+    mainImage: "/images/defect-detection-main.png",
+    video: "/videos/defect-detection.mp4",
+    github: "https://github.com/kimjaegwan0218/defect-detection-project",
+  },
 ];
 
 const fadeUp = {
@@ -366,6 +429,8 @@ function Label({ children, color = "cyan" }) {
 }
 
 function Hero() {
+  const [openSkill, setOpenSkill] = useState(null);
+
   return (
     <section className="bg-[#f7f1e6] px-5 pb-24 pt-40 md:pt-48">
       <div className="mx-auto max-w-4xl">
@@ -410,17 +475,50 @@ function Hero() {
                 <Mail className="h-4 w-4" /> Email
               </a>
             </div>
-            <div className="mt-8 grid gap-3 md:grid-cols-3">
-              {skills.map((skill) => (
-                <Link
-                  key={skill.label}
-                  to={skill.href}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-4 py-3 text-center text-xs font-black text-white transition hover:-translate-y-1 hover:bg-[#00a8b8] hover:text-black"
-                >
-                  {skill.label}
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </Link>
-              ))}
+            <div className="mt-8 grid items-start gap-3 md:grid-cols-3">
+              {skills.map((skill) =>
+                skill.links ? (
+                  <div key={skill.label} className="relative">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenSkill((prev) => (prev === skill.label ? null : skill.label))
+                      }
+                      aria-expanded={openSkill === skill.label}
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-zinc-900 px-4 py-3 text-center text-xs font-black text-white transition hover:-translate-y-1 hover:bg-[#00a8b8] hover:text-black"
+                    >
+                      {skill.label}
+                      <ArrowRight
+                        className={`h-3.5 w-3.5 transition ${
+                          openSkill === skill.label ? "rotate-90" : "group-hover:translate-x-0.5"
+                        }`}
+                      />
+                    </button>
+                    {openSkill === skill.label && (
+                      <div className="mt-2 flex gap-2">
+                        {skill.links.map((link) => (
+                          <Link
+                            key={link.label}
+                            to={link.to}
+                            className="flex-1 rounded-full border-2 border-zinc-900 bg-white px-3 py-2 text-center text-[11px] font-black text-zinc-900 transition hover:-translate-y-1 hover:bg-zinc-900 hover:text-white"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    key={skill.label}
+                    to={skill.href}
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-4 py-3 text-center text-xs font-black text-white transition hover:-translate-y-1 hover:bg-[#00a8b8] hover:text-black"
+                  >
+                    {skill.label}
+                    <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                  </Link>
+                )
+              )}
             </div>
           </div>
         </motion.div>
@@ -556,6 +654,18 @@ function ProjectCard({ project, index }) {
           </span>
         ))}
       </div>
+      {project.results && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {project.results.map((item) => (
+            <span
+              key={item.label}
+              className={`${accent} inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-black text-black`}
+            >
+              {item.label} {item.value}
+            </span>
+          ))}
+        </div>
+      )}
       <p className="mt-5 text-sm leading-7 text-white/80 md:text-base">{project.summary}</p>
       <ul className="mt-4 space-y-2 text-xs leading-6 text-white/70 md:text-sm">
         {project.role.slice(0, 3).map((item) => (
@@ -685,6 +795,22 @@ function ProjectDetailPage() {
         <DetailBlock title="Overview.">
           <p className="text-lg leading-9">{project.background}</p>
         </DetailBlock>
+
+        {project.results && (
+          <DetailBlock title="Result.">
+            <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+              {project.results.map((item) => (
+                <div key={item.label} className="rounded-2xl border-2 border-black bg-white p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.15em] text-zinc-500">{item.label}</p>
+                  <p className="mt-2 text-3xl font-black text-[#00a8b8]">{item.value}</p>
+                  {item.detail && (
+                    <p className="mt-2 text-xs leading-6 text-zinc-600">{item.detail}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </DetailBlock>
+        )}
 
         <div className="grid gap-8 md:grid-cols-2">
           <DetailBlock title="Role.">
